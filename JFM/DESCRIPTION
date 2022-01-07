@@ -1,0 +1,19 @@
+Encoding: UTF-8
+Package: JFM
+Type: Package
+Title: 3D Mesh from Point Cloud Structural Analysis
+Version: 1.0
+Date: 2021-12-06
+Authors@R: person("Riccardo", "Campana",email = "riccarl@hotmail.it",
+                  role = c("aut", "cre"))
+Description: Provides functions to extract joint planes from 3D triangular mesh derived
+             from point cloud and makes data available for structural analysis.
+License: GPL
+Imports: Rcpp (>= 0.12.18),
+         MASS (>= 7.3.50), 
+         rgl (>= 0.99.16), 
+         RockFab (>= 1.2), 
+         Rvcg (>= 0.17), 
+         randomcoloR(>= 1.1.0)
+LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 7.1.2
