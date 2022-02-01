@@ -394,33 +394,38 @@ std::vector<double> compute_plane_area_rcpp( arma::mat tr_area, std::vector<int>
 //'
 //' @param PointsXYZ        matrix of coordinates of point
 //' @examples
-//' list_xyz<-matrix(data = c(-10, -10, -15,10, -10, -5, -10, 10,5, 10, 10,15)
-//' ,nrow = 4,ncol = 3, byrow = TRUE)
+//' list_xyz<-matrix(data = c(-10.0, -10.0, -15.0 ,10.0, -10.0,
+//' -5.0, -10.0, 10.0, 5.0, 10.0, 10.0 ,15.0),
+//' nrow = 4,ncol = 3, byrow = TRUE)
 //' least_square_plane_rcpp(list_xyz)
 //' @export
 // [[Rcpp::export]]
 
 NumericVector least_square_plane_rcpp (NumericMatrix PointsXYZ) {
   
-  int nrow_Points = PointsXYZ.rows()  ;
+  int nrow_Points = PointsXYZ.rows()  ;//n_rows
   //int ncol_Points = PointsXYZ.n_cols;
-  float x_centroid;
-  float y_centroid;
-  float z_centroid;
+  double x_centroid=0.0;
+  double y_centroid=0.0;
+  double z_centroid=0.0;
+  //double x_centroidd;
+  //double y_centroidd;
+  //double z_centroidd;
   //double sum_x_diff;
   //double sum_y_diff;
   //double sum_z_diff;
-  arma::mat differences(nrow_Points,3);
-  arma::rowvec cov_component(6);
+  NumericMatrix differences(nrow_Points,3);
+  std::vector<double> cov_component(6);
   arma::mat covariance_matrix(3,3);
   arma::vec eigen_values(3);
   arma::mat eigen_vectors(3,3);
-  arma::rowvec plane_normals(3);
-  double d;
-  double distances_quad;
+  arma::vec plane_normals(3);
+  double d=0.0;
+  double distances_quad=0.0;
   
   for ( int i = 0; i < nrow_Points; i++) {
     
+  
     
     
     x_centroid += PointsXYZ(i,0);
@@ -460,6 +465,15 @@ NumericVector least_square_plane_rcpp (NumericMatrix PointsXYZ) {
   covariance_matrix(2,0)=cov_component[2];
   covariance_matrix(2,1)=cov_component[4];
   covariance_matrix(2,2)=cov_component[5];
+  
+  //for ( int i = 0; i < 3; i++) {
+    
+  //    for ( int j = 0; j < 3; j++) {
+      
+  //       Rcout<<covariance_matrix(i,j)<<std::endl;
+      
+  //      }
+  //     }
 
   eig_sym(eigen_values,eigen_vectors,covariance_matrix);
   
@@ -476,11 +490,11 @@ NumericVector least_square_plane_rcpp (NumericMatrix PointsXYZ) {
   
   for (unsigned int i = 0; i < nrow_Points; i++) {
     
-    distances_quad +=  pow(((differences(i,0)*plane_normals[0]+differences(i,1)*plane_normals[1]+differences(i,2)*plane_normals[2])/sqrt(pow(plane_normals[0],2.0)+pow(plane_normals[1],2.0)+pow(plane_normals[2],2.0))),2.0);
+   distances_quad +=  pow(((differences(i,0)*plane_normals[0]+differences(i,1)*plane_normals[1]+differences(i,2)*plane_normals[2])/sqrt(pow(plane_normals[0],2.0)+pow(plane_normals[1],2.0)+pow(plane_normals[2],2.0))),2.0);
   }
   
   
-  double err=sqrt(distances_quad/nrow_Points);
+  double err=sqrt(distances_quad/double(nrow_Points));
   
   NumericVector plane(5);
   
@@ -685,7 +699,7 @@ NumericMatrix find_neighbours_rcpp (NumericMatrix indici_tr) {
 //' @export
 // [[Rcpp::export]]
 
-NumericMatrix compute_plane_normal( arma::mat it_id_plane_points,arma::mat vb_facets, std::vector<int> id_fam_no_zero){
+arma::mat compute_plane_normal( arma::mat it_id_plane_points,arma::mat vb_facets, std::vector<int> id_fam_no_zero){
   
   int nrow_it = it_id_plane_points.n_rows;
   int ncol_it = it_id_plane_points.n_cols;
@@ -709,7 +723,7 @@ NumericMatrix compute_plane_normal( arma::mat it_id_plane_points,arma::mat vb_fa
   
   double perc = 0;
  
-  NumericMatrix plane_norm_list(id_fam_no_zero.size(),5);
+  arma::mat plane_norm_list(id_fam_no_zero.size(),5);
   
   
   
@@ -785,7 +799,7 @@ NumericMatrix compute_plane_normal( arma::mat it_id_plane_points,arma::mat vb_fa
       
       //std::cout << k <<std::endl ;
       
-
+      //Rcout << "ok" <<std::endl ;
       
       plane_norm_list(k,0)=plane_normal[0];
       plane_norm_list(k,1)=plane_normal[1];
@@ -811,7 +825,7 @@ NumericMatrix compute_plane_normal( arma::mat it_id_plane_points,arma::mat vb_fa
 
 // [[Rcpp::export]]
 
-NumericVector test_rcpp( arma::mat it_id_plane_points,arma::mat vb_facets, std::vector<int> id_fam_no_zero){
+NumericMatrix test_rcpp( arma::mat it_id_plane_points,arma::mat vb_facets, std::vector<int> id_fam_no_zero){
   
   int nrow_it = it_id_plane_points.n_rows;
   int ncol_it = it_id_plane_points.n_cols;
@@ -920,7 +934,7 @@ NumericVector test_rcpp( arma::mat it_id_plane_points,arma::mat vb_facets, std::
     }
   }
   }
-  return plane_normal;
+  return xyz_1;
 }
 
 /*** R
