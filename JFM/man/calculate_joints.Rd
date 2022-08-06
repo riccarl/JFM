@@ -4,10 +4,12 @@
 \alias{calculate_joints}
 \title{calculate_joints}
 \usage{
-calculate_joints(d_mesh, normal_from_wild)
+calculate_joints(vertici_tr, indici_tri, normal_from_wild)
 }
 \arguments{
-\item{d_mesh}{3D mesh object}
+\item{vertici_tr}{list of facets vertexes coordinates ("vb property of mesh3d object")}
+
+\item{indici_tri}{list of facets indexes ("it property of mesh3d object")}
 
 \item{normal_from_wild}{matrix of data resulting from wildfire search}
 }
