@@ -13,6 +13,7 @@ using namespace arma;
 //'
 //' @param ab        a 3D numeric vector  
 //' @param ac        a 3D numeric vector 
+//' @return  the dot product of \code{ab} and \code{ac}
 //' @examples
 //' a1<-c(1,2,3)
 //' a2<-c(3,4,5)
@@ -43,7 +44,8 @@ double rcpparma_dotproduct (std::vector<double> ab, std::vector<double> ac ) {
 //' @title returns the outer product of ab and ac 
 //'
 //' @param ab        a 3D numeric vector  
-//' @param ac        a 3D numeric vector 
+//' @param ac        a 3D numeric vector
+//' @return  the outer product of \code{ab} and \code{ac}
 //' @examples
 //' a1<-c(1,2,3)
 //' a2<-c(3,4,5)
@@ -67,11 +69,12 @@ std::vector<double> rcpp_crossProd (std::vector<double> ab ,  std::vector<double
 }
 
 //' @name Rcpp_wildfire_search
-//' @title returns a a matrix with the components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
+//' @title returns a matrix with the 3 components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
 //' the 5th colum the area of each facet
 //' @param tol_ang        the maximum angle between facets normal belonging to the same plane
 //' @param list_of_normals        the matrix of the components of each facet normal vector
 //' @param list_neighbours        the matrix of facets ID neighbours of each target facet
+//' @return the IDs of same joint facets given a \code{tol_angle} between facets normal and 3Dmesh \code{list_of_normals} and \code{list_neighbours} 
 //' @examples \dontrun{neighbours<-find_neighbours_rcpp(indici_tri)
 //' normals<-compute_facets_normal(vertici_tr,indici_tri)
 //' tol_ang<-7
@@ -289,10 +292,9 @@ arma::mat Rcpp_wildfire_search(double tol_ang, arma::mat list_of_normals, arma::
 
 
 //' @name compute_triangle_area_rcpp
-//' @title returns the area of each facet
+//' @title returns the area of a mesh facet
 //'
 //' @param tr_vertex_coords        A 3x3 matrix of the coordinates of facet vertexes
-
 
 // [[Rcpp::export]]
 
@@ -344,6 +346,7 @@ std::vector<double> compute_triangle_area_rcpp( arma::mat tr_vertex_coords){
 //'
 //' @param tr_area        a matrix with the first column facet area and second column the ID of plane it belows
 //' @param id_fam_no_zero        the list of planes ID
+//' @return the sum of the area of facets belonging to the same plane given \code{tr_area} and \code{id_fam_no_zero}
 
 //'
 //' @export
@@ -390,9 +393,10 @@ std::vector<double> compute_plane_area_rcpp( arma::mat tr_area, std::vector<int>
 
 
 //' @name least_square_plane_rcpp
-//' @title returns the coefficients of the least square plane and the relative medium square error
+//' @title returns the coefficients of the least square plane and the relative mean square error
 //'
 //' @param PointsXYZ        matrix of coordinates of point
+//' @return returns the coefficients of the least square plane and the relative mean square error of a set of 3d points \code{PointsXYZ} 
 //' @examples
 //' list_xyz<-matrix(data = c(-10.0, -10.0, -15.0 ,10.0, -10.0,
 //' -5.0, -10.0, 10.0, 5.0, 10.0, 10.0 ,15.0),
@@ -510,14 +514,17 @@ NumericVector least_square_plane_rcpp (NumericMatrix PointsXYZ) {
 
 
 //' @name find_triangles_rcpp
-//' @title returns the indexes of the neighbour facets of a target facet (nested in findNeighbourFacets function)
+//' @title returns the row indexes of the neighbour facets of a target facet (nested in findNeighbourFacets R function)
 //'
-//' @param indici_tr        matrix of facets ID the "it" property of a mesh3D
-//' @param r            index of the row of the target facet
-//' @examples \dontrun{indici_tri<-t(mesh3d[['it']])
+//' @param indici_tr matrix of facets ID the "it" property of a mesh3D
+//' @param r index of the row of the target facet
+//' @return returns the row indexes of the neighbour facets of the facet at \code{r} row of \code{indici_tr} facet indexes matrix
+//' @examples 
+//' indici_tri<-matrix(data = c(1, 2, 3 ,5, 6,
+//' 3, 2, 3, 5,7, 8 ,1),
+//' nrow = 4,ncol = 3, byrow = TRUE)
 //' row_index<-1
-//' find_triangles_rcpp (indici_tri,row_index)}
-//'
+//' find_triangles_rcpp (indici_tri,row_index)
 //' @export
 // [[Rcpp::export]]
 
@@ -568,13 +575,15 @@ std::vector<int> find_triangles_rcpp (NumericMatrix indici_tr, int r) {
 }
 
 //' @name find_neighbours_rcpp
-//' @title This function finds the IDs of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object
+//' @title This function finds the  rows IDs of neighbours of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object
 //'
 //' @param indici_tr        matrix of facets ID the "it" property of a mesh3D
-//' @examples \dontrun{indici_tri<-t(mesh3d[['it']])
-//'  
-//'  neighbours<-find_neighbours_rcpp(indici_tri)}
-//'
+//' @return  this function returns the  rows IDs of neighbours of each mesh facet given a list of facets indexes \code{indici_tri}
+//' @examples
+//' indici_tri<-matrix(data = c(1, 2, 3 ,5, 6,
+//' 3, 2, 3, 5,7, 8 ,1),
+//' nrow = 4,ncol = 3, byrow = TRUE)  
+//' find_neighbours_rcpp(indici_tri)
 //' @export
 // [[Rcpp::export]]
 
@@ -689,13 +698,9 @@ NumericMatrix find_neighbours_rcpp (NumericMatrix indici_tr) {
 //' @param it_id_plane_points        the "it"property of mesh object binded with ID column of widfire search 
 //' @param id_fam_no_zero            the list of planes ID
 //' @param vb_facets                 the vb property of mesh object (vertexes coordinates)
-//' @examples \dontrun{ vertici_tr<-t(d_mesh[["vb"]])
-//' indici_tri<-t(d_mesh[['it']]) 
-//' id_fam<-normal_from_wild[!duplicated(normal_from_wild[,5]),5]
-//' id_fam_no_zero<-id_fam[which(id_fam!=0)]
-//' it_id_fam<-cbind(indici_tri,normal_from_wild[,5])
-//' compute_plane_normal(it_id_fam,vertici_tr,id_fam_no_zero) }
-//'
+//' @return returns the least square plane from the vertexes of facets of the same plane given \code{it_id_plane_points}
+//'  the list of planes ID \code{id_fam_no_zero}, the matrix of vertexes coordinates \code{vb_facets}
+//' @example .\inst\test\example.R
 //' @export
 // [[Rcpp::export]]
 
