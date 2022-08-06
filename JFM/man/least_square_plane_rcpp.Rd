@@ -2,18 +2,22 @@
 % Please edit documentation in R/RcppExports.R
 \name{least_square_plane_rcpp}
 \alias{least_square_plane_rcpp}
-\title{returns the coefficients of the least square plane and the relative medium square error}
+\title{returns the coefficients of the least square plane and the relative mean square error}
 \usage{
 least_square_plane_rcpp(PointsXYZ)
 }
 \arguments{
 \item{PointsXYZ}{matrix of coordinates of point}
 }
+\value{
+returns the coefficients of the least square plane and the relative mean square error of a set of 3d points \code{PointsXYZ}
+}
 \description{
-returns the coefficients of the least square plane and the relative medium square error
+returns the coefficients of the least square plane and the relative mean square error
 }
 \examples{
-list_xyz<-matrix(data = c(-10, -10, -15,10, -10, -5, -10, 10,5, 10, 10,15)
-,nrow = 4,ncol = 3, byrow = TRUE)
+list_xyz<-matrix(data = c(-10.0, -10.0, -15.0 ,10.0, -10.0,
+-5.0, -10.0, 10.0, 5.0, 10.0, 10.0 ,15.0),
+nrow = 4,ncol = 3, byrow = TRUE)
 least_square_plane_rcpp(list_xyz)
 }

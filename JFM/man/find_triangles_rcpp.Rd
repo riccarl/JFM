@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{find_triangles_rcpp}
 \alias{find_triangles_rcpp}
-\title{returns the indexes of the neighbour facets of a target facet (nested in findNeighbourFacets function)}
+\title{returns the row indexes of the neighbour facets of a target facet (nested in findNeighbourFacets R function)}
 \usage{
 find_triangles_rcpp(indici_tr, r)
 }
@@ -11,12 +11,16 @@ find_triangles_rcpp(indici_tr, r)
 
 \item{r}{index of the row of the target facet}
 }
+\value{
+returns the row indexes of the neighbour facets of the facet at \code{r} row of \code{indici_tr} facet indexes matrix
+}
 \description{
-returns the indexes of the neighbour facets of a target facet (nested in findNeighbourFacets function)
+returns the row indexes of the neighbour facets of a target facet (nested in findNeighbourFacets R function)
 }
 \examples{
-\dontrun{indici_tri<-t(mesh3d[['it']])
+indici_tri<-matrix(data = c(1, 2, 3 ,5, 6,
+3, 2, 3, 5,7, 8 ,1),
+nrow = 4,ncol = 3, byrow = TRUE)
 row_index<-1
-find_triangles_rcpp (indici_tri,row_index)}
-
+find_triangles_rcpp (indici_tri,row_index)
 }

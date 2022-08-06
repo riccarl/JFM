@@ -2,19 +2,22 @@
 % Please edit documentation in R/RcppExports.R
 \name{find_neighbours_rcpp}
 \alias{find_neighbours_rcpp}
-\title{This function finds the IDs of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object}
+\title{This function finds the  rows IDs of neighbours of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object}
 \usage{
 find_neighbours_rcpp(indici_tr)
 }
 \arguments{
 \item{indici_tr}{matrix of facets ID the "it" property of a mesh3D}
 }
+\value{
+this function returns the  rows IDs of neighbours of each mesh facet given a list of facets indexes \code{indici_tri}
+}
 \description{
-This function finds the IDs of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object
+This function finds the  rows IDs of neighbours of each mesh facet. It requires a list of facets indexes corresponding to the "it" property of mesh3d object
 }
 \examples{
-\dontrun{indici_tri<-t(mesh3d[['it']])
- 
- neighbours<-find_neighbours_rcpp(indici_tri)}
-
+indici_tri<-matrix(data = c(1, 2, 3 ,5, 6,
+3, 2, 3, 5,7, 8 ,1),
+nrow = 4,ncol = 3, byrow = TRUE)  
+find_neighbours_rcpp(indici_tri)
 }

@@ -8,6 +8,9 @@
 
 \item{id_fam_no_zero}{the list of planes ID}
 }
+\value{
+the sum of the area of facets belonging to the same plane given \code{tr_area} and \code{id_fam_no_zero}
+}
 \description{
 returns the sum of the area of facets belonging to the same plane
 }

@@ -2,10 +2,10 @@
 % Please edit documentation in R/RcppExports.R
 \name{compute_triangle_area_rcpp}
 \alias{compute_triangle_area_rcpp}
-\title{returns the area of each facet}
+\title{returns the area of a mesh facet}
 \arguments{
 \item{tr_vertex_coords}{A 3x3 matrix of the coordinates of facet vertexes}
 }
 \description{
-returns the area of each facet
+returns the area of a mesh facet
 }

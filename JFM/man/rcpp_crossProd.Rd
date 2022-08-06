@@ -11,6 +11,9 @@ rcpp_crossProd(ab, ac)
 
 \item{ac}{a 3D numeric vector}
 }
+\value{
+the outer product of \code{ab} and \code{ac}
+}
 \description{
 returns the outer product of ab and ac
 }

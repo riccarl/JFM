@@ -8,6 +8,9 @@
 
 \item{ac}{a 3D numeric vector}
 }
+\value{
+the dot product of \code{ab} and \code{ac}
+}
 \description{
 returns the inner product of ab and ac
 }
