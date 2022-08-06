@@ -106,7 +106,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // compute_plane_normal
-NumericMatrix compute_plane_normal(arma::mat it_id_plane_points, arma::mat vb_facets, std::vector<int> id_fam_no_zero);
+arma::mat compute_plane_normal(arma::mat it_id_plane_points, arma::mat vb_facets, std::vector<int> id_fam_no_zero);
 RcppExport SEXP _JFM_compute_plane_normal(SEXP it_id_plane_pointsSEXP, SEXP vb_facetsSEXP, SEXP id_fam_no_zeroSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -119,7 +119,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // test_rcpp
-NumericVector test_rcpp(arma::mat it_id_plane_points, arma::mat vb_facets, std::vector<int> id_fam_no_zero);
+NumericMatrix test_rcpp(arma::mat it_id_plane_points, arma::mat vb_facets, std::vector<int> id_fam_no_zero);
 RcppExport SEXP _JFM_test_rcpp(SEXP it_id_plane_pointsSEXP, SEXP vb_facetsSEXP, SEXP id_fam_no_zeroSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
