@@ -1,11 +1,13 @@
 Encoding: UTF-8
 Package: JFM
 Type: Package
-Title: 3D Mesh from Point Cloud Structural Analysis
+Title: Rock Mass Structural Analysis from 3D Mesh of Point Cloud 
 Version: 1.0
-Date: 2021-12-06
-Authors@R: person("Riccardo", "Campana",email = "riccarl@hotmail.it",
-                  role = c("aut", "cre"))
+Date: 2022-03-10
+Authors@R: 
+  c(person("Riccardo", "Campana",email = "riccarl@hotmail.it",
+                  role = c("aut", "cre")),
+    person("Jeffrey R.", "Webber", email = "webber@geo.umass.edu",role ="ctb"))
 Description: Provides functions to extract joint planes from 3D triangular mesh derived
              from point cloud and makes data available for structural analysis.
 License: GPL

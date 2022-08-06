@@ -169,7 +169,7 @@ plot_triangoli_legenda<-function(trian,vert,list_col){
 
 # for (j in 1:dim(vertici)[1]){
 #
-compute_normals<-function(vertici,indici_tr,j,tot,progr){
+compute_normals<-function(vertici,indici_tr,j){
   
   t1<-c(vertici[indici_tr[j,1],1],vertici[indici_tr[j,1],2],vertici[indici_tr[j,1],3])
   
@@ -187,15 +187,7 @@ compute_normals<-function(vertici,indici_tr,j,tot,progr){
   
   facet_char<-c(v_n,facet_area)
   
-  perc = j/tot * 100;
-  
-  if (perc >= progr){
-    
-    cat(progr , "%.. ")
-    
-    .GlobalEnv$progr<- progr + 10
-
-  }
+ 
   
   return(facet_char)
 }
@@ -440,14 +432,8 @@ findNeighbourFacets<-function(no_cores,indici_tri){
 #' 
 compute_facets_normal<-function(vertici_tr,indici_tri){
   
-
-  
-  .GlobalEnv$progr<-0
-  
-  
-  tot<-dim(indici_tri)[1]
-  
-  normali_recalc<-sapply(1:dim(indici_tri)[1],function(h) compute_normals(vertici_tr,indici_tri,h, tot, progr),simplify = TRUE)
+ 
+  normali_recalc<-sapply(1:dim(indici_tri)[1],function(h) compute_normals(vertici_tr,indici_tri,h),simplify = TRUE)
   
   normali_recalc<-t(normali_recalc)
   
@@ -465,7 +451,7 @@ compute_facets_normal<-function(vertici_tr,indici_tri){
   
 
   
-  rm(list = c("progr"), pos = ".GlobalEnv")
+ 
   
   return(normali_recalc)
   
@@ -521,7 +507,7 @@ plotrand_col_planes<-function(mesh_tr, normal_from_wild){
   
   axes3d(c('x','y','z'))
   
-
+  return(mesh_tr)
 }
 
 
@@ -531,7 +517,8 @@ plotrand_col_planes<-function(mesh_tr, normal_from_wild){
 #' This function calculates joint orientation with the least square method
 #' selecting vertexes of each facet plane
 #'
-#' @param d_mesh 3D mesh object 
+#' @param vertici_tr list of facets vertexes coordinates ("vb property of mesh3d object")
+#' @param indici_tri list of facets indexes ("it property of mesh3d object")
 #' @param normal_from_wild matrix of data resulting from wildfire search
 #' @return a matrix of least square plane for each joint
 #' @examples 
@@ -545,11 +532,11 @@ plotrand_col_planes<-function(mesh_tr, normal_from_wild){
 #' 
 #' @export
 #' 
-calculate_joints<-function(d_mesh,normal_from_wild){
+calculate_joints<-function(vertici_tr,indici_tri,normal_from_wild){
   
-  vertici_tr<-t(d_mesh[["vb"]])
+  #vertici_tr<-t(d_mesh[["vb"]])
   
-  indici_tri<-t(d_mesh[['it']]) 
+  #indici_tri<-t(d_mesh[['it']]) 
  
   id_fam<-normal_from_wild[!duplicated(normal_from_wild[,5]),5]
   
@@ -598,9 +585,75 @@ calculate_joints_area<-function(normal_from_wild){
   
 }
 
-utils::globalVariables(c("progr"))
+StereoPoint<-function (my.az = 90, my.inc = 45, my.color = "black", 
+                       my.pch = 19, my.size = 0.25, my.label) 
+{
+  my.az <- my.az * (pi/180) + pi
+  my.inc <- my.inc * (pi/180) - pi/2
+  my.tq <- sqrt(2) * sin(my.inc/2)
+  my.x <- my.tq * sin(my.az)
+  my.y <- my.tq * cos(my.az)
+  if (!missing(my.label)) {
+    i <- 0
+    par(ps = 8)
+    while (i < length(my.label)) {
+      i <- 1 + i
+      text(my.x[i] + 0.025, my.y[i] + 0.025, my.label[i], 
+           cex = 0.9, adj = c(0, 0))
+    }
+  }
+  points(my.x, my.y, pch = my.pch, col = my.color, cex = my.size)
+}
 
 
+StereoPlot<-function (my.title = "Stereonet", new = TRUE, pdf.file) 
+{
+  if (new == TRUE & missing(pdf.file)) {
+    dev.new(width = 3, height = 3.75, family = "serif")
+  }
+  if (missing(pdf.file) == FALSE) {
+    pdf(file = pdf.file, width = 3, height = 3.75, family = "serif", 
+        useDingbats = FALSE)
+  }
+  par(mai = c(0, 0, 0, 0), omi = c(0, 0, 0.5, 0))
+  plot(0, 0, pch = "", asp = 1, ann = FALSE, xlim = c(-1, 
+                                                      1), ylim = c(-1, 1), axes = FALSE)
+  lines(c(0, 0), c(1, 1.02), lwd = 0.5)
+  text(0, 1.025, "N", adj = c(0.5, 0), cex = 0.75)
+  mtext(my.title, cex = 1.25)
+}
+
+StereoCirc<-function (n.seg = 360) 
+{
+  cir.x <- cos(seq(from = 0, to = 2 * pi, length = n.seg))
+  cir.y <- sin(seq(from = 0, to = 2 * pi, length = n.seg))
+  lines(cir.x, cir.y)
+  lines(c(-0.025, 0.025), c(0, 0), lwd = 0.5)
+  lines(c(0, 0), c(-0.025, 0.025), lwd = 0.5)
+}
+
+StereoWeb<-function () 
+{
+  my.lambda.sc = seq(from = 0, to = pi, by = pi/36) - pi/2
+  for (j in seq(from = -1 * pi/2 + pi/18, to = pi/2 - pi/18, 
+                by = pi/18)) {
+    x = (sqrt(2)/2) * sqrt(2/(1 + cos(j) * cos(my.lambda.sc))) * 
+      cos(j) * sin(my.lambda.sc)
+    y = (sqrt(2)/2) * sqrt(2/(1 + cos(j) * cos(my.lambda.sc))) * 
+      sin(j)
+    lines(x, y, lwd = 0.5, col = "#dddddd")
+  }
+  my.phi <- seq(from = -1 * pi/2, to = pi/2, by = pi/36)
+  for (j in seq(from = pi/18, to = pi - pi/18, by = pi/18)) {
+    x = (sqrt(2)/2) * sqrt(2/(1 + cos(my.phi) * cos(j - pi/2))) * 
+      cos(my.phi) * sin(j - pi/2)
+    y = (sqrt(2)/2) * sqrt(2/(1 + cos(my.phi) * cos(j - pi/2))) * 
+      sin(my.phi)
+    lines(x, y, lwd = 0.5, col = "#dddddd")
+  }
+  lines(c(-0.025, 0.025), c(0, 0), lwd = 0.5)
+  lines(c(0, 0), c(-0.025, 0.025), lwd = 0.5)
+}
 
 
 

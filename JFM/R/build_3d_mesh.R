@@ -13,11 +13,11 @@
 #' @importFrom utils read.table write.table
 #' @importFrom rgl open3d wire3d axes3d shade3d tmesh3d
 #' @examples 
-#' path2myXYZRGBtxt<-system.file("extdata", "point_cloud.txt", package = "JFM")
+#' \dontrun{path2myXYZRGBtxt<-system.file("extdata", "test.txt", package = "JFM")
 #' 
-#' file_name<- "point_cloud"
+#' file_name<- "test"
 #' 
-#' \dontrun{mesh3d<-build_3d_mesh(path2myXYZRGBtxt,0.5,file_name)}
+#'mesh3d<-build_3d_mesh(path2myXYZRGBtxt,0.5,file_name)}
 
 build_3d_mesh<-function(path2myXYZRGBtxt, search_radius, file_name){
   

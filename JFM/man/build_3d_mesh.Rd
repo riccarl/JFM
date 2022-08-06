@@ -22,9 +22,9 @@ and an output file name to save the resulting mesh.
 for data format see file in package extdata folder
 }
 \examples{
-path2myXYZRGBtxt<-system.file("extdata", "point_cloud.txt", package = "JFM")
+\dontrun{path2myXYZRGBtxt<-system.file("extdata", "test.txt", package = "JFM")
 
-file_name<- "point_cloud"
+file_name<- "test"
 
-\dontrun{mesh3d<-build_3d_mesh(path2myXYZRGBtxt,0.5,file_name)}
+mesh3d<-build_3d_mesh(path2myXYZRGBtxt,0.5,file_name)}
 }

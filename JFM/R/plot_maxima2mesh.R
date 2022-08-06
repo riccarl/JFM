@@ -101,4 +101,6 @@ plot_maxima2mesh<-function(mesh_tr,planes_max,normal_from_wild, tol_ang_fam){
   
   axes3d(c('x','y','z'))
   
+  return(mesh_tr)
+  
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{Rcpp_wildfire_search}
 \alias{Rcpp_wildfire_search}
-\title{returns a a matrix with the components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
+\title{returns a matrix with the 3 components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
 the 5th colum the area of each facet}
 \usage{
 Rcpp_wildfire_search(tol_ang, list_of_normals, list_neighbours)
@@ -14,8 +14,11 @@ Rcpp_wildfire_search(tol_ang, list_of_normals, list_neighbours)
 
 \item{list_neighbours}{the matrix of facets ID neighbours of each target facet}
 }
+\value{
+the IDs of same joint facets given a \code{tol_angle} between facets normal and 3Dmesh \code{list_of_normals} and \code{list_neighbours}
+}
 \description{
-returns a a matrix with the components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
+returns a matrix with the 3 components of each face normal vector; the 4th column is the ID of the plane each facet belongs to
 the 5th colum the area of each facet
 }
 \examples{

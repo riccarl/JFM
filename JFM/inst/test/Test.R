@@ -65,7 +65,7 @@ plotrand_col_planes(mesh3d,normali_recalc)
 ### calculate least square plane for each group of facets
 
 
-joint_list_Cpp<-calculate_joints(mesh3d,normali_recalc)
+joint_list_Cpp<-calculate_joints(vertici_tr,indici_tri,normali_recalc)
 
 
 
